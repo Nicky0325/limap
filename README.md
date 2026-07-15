@@ -16,6 +16,21 @@ In this project, we provide interfaces for various geometric operations on 2D/3D
 <img width=100% src="./misc/media/barn_lsd.gif" style="margin:-300px 0px -300px 0px">
 </p>
 
+## NVIDIA Dev Container
+
+The repository includes a VS Code dev container for native x86_64 Linux development with an NVIDIA GPU. The host needs Docker Engine, NVIDIA Container Toolkit, a driver compatible with CUDA 11.8, an X11/XWayland desktop session, at least 16 GB RAM, and about 30 GB of free disk. A host CUDA toolkit is not required.
+
+1. Install the VS Code **Dev Containers** extension and confirm that `docker info`, `nvidia-smi`, and `docker run --rm --gpus all nvidia/cuda:11.8.0-base-ubuntu22.04 nvidia-smi` work on the host.
+2. Open this checkout in VS Code and run **Dev Containers: Rebuild and Reopen in Container**.
+3. Wait for the image dependencies, recursive submodules, and the editable native build to finish. A clean first build downloads several GB and commonly takes 20–60 minutes; later builds reuse Docker layers, the mounted `build/devcontainer` tree, and the `limap-devcontainer-ccache` volume.
+4. Run **Terminal → Run Task → LIMAP: Smoke test**. The other provided tasks rebuild the editable package, run the CI test selection, or run the reusable CPU quickstart. To keep that task interactive, it uses an 8-view subset with the CPU/SIFT configuration and the bundled endpoint matcher, so the optional LBD package is not required.
+
+Source files remain on the host and are mounted into the container. Editing Python does not require a rebuild; after changing C++ or CMake files, run **LIMAP: Rebuild editable**. Use **Rebuild Container** when the Dockerfile, requirements, constraints, or container configuration changes. HAWP, TP-LSD, LBD, and RoMa remain optional manual installations and are not included in the base image.
+
+If preflight reports an NVIDIA error, install/configure NVIDIA Container Toolkit, run `sudo nvidia-ctk runtime configure --runtime=docker`, restart Docker, and retry the GPU command above. A missing `DISPLAY` usually means VS Code was not launched from the graphical X11/XWayland session. For Xauthority errors, confirm `xauth list "$DISPLAY"` returns a cookie and that `XAUTHORITY` points to the active session database. `glxinfo -B` inside the container is a useful graphics check.
+
+The generated cookie should normally avoid `xhost`. As a temporary, narrowly scoped fallback, grant only the synchronized local user with `xhost +SI:localuser:"$USER"`, reopen the container, and revoke it afterward with `xhost -SI:localuser:"$USER"`. Do not use `xhost +` or `xhost +local:*`.
+
 ## Installation
 
 **Install the dependencies as follows:**
@@ -117,4 +132,3 @@ If you use this code in your project, please consider citing the following paper
 
 ## Contributors
 This project is mainly developed and maintained by [Shaohui Liu](https://github.com/B1ueber2y/), [Yifan Yu](https://github.com/MarkYu98), [Rémi Pautrat](https://github.com/rpautrat), and [Viktor Larsson](https://github.com/vlarsson). Issues and contributions are very welcome at any time. 
-

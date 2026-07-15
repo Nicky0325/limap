@@ -1,5 +1,8 @@
-# LIMAP Docker Image Build from Dockerfile
-This document explains how to build docker image for LIMAP. This document assumes that readers' systems meet following requirements:
+# Legacy LIMAP Docker Image
+
+> **Legacy:** `docker/Dockerfile` is retained for compatibility with the original standalone image workflow. It copies a cloned checkout into an image and uses older CUDA/Python dependencies. For active development, use the repository-owned [`.devcontainer`](../.devcontainer) configuration described in the root [README](../README.md#nvidia-dev-container); it mounts the current checkout, needs no build credentials, and provides an editable build.
+
+This document explains how to build the legacy Docker image for LIMAP. This document assumes that readers' systems meet following requirements:
 - x86-64 (amd64) architecture
 - GPU that supports CUDA 11.5
 - Ubuntu

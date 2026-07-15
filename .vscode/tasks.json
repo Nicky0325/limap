@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "LIMAP: Rebuild editable",
+      "type": "shell",
+      "command": "bash .devcontainer/post-create.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "LIMAP: Smoke test",
+      "type": "shell",
+      "command": "bash .devcontainer/smoke-test.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "LIMAP: CI tests",
+      "type": "shell",
+      "command": "pytest -m ci_workflow tests",
+      "problemMatcher": []
+    },
+    {
+      "label": "LIMAP: Quickstart (CPU)",
+      "type": "shell",
+      "command": "set -Eeuo pipefail; test -d data/ai_001_001 || bash scripts/quickstart.sh; python runners/hypersim/triangulation.py --default_config_file cfgs/triangulation/default_cpu.yaml --input_n_views 8 --max_image_dim 400 --line2d.max_num_2d_segs 100 --line2d.extractor.method superpoint_endpoints --line2d.matcher.method nn_endpoints --output_dir outputs/quickstart_triangulation_cpu_task_v2 --skip_exists --visualize 0",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "name": "LIMAP CUDA 11.8",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "..",
+    "options": [
+      "--platform=linux/amd64"
+    ]
+  },
+  "remoteUser": "vscode",
+  "updateRemoteUserUID": true,
+  "runArgs": [
+    "--gpus=all",
+    "--shm-size=16g"
+  ],
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}",
+    "XAUTHORITY": "/tmp/limap-devcontainer.xauth",
+    "NVIDIA_VISIBLE_DEVICES": "all",
+    "NVIDIA_DRIVER_CAPABILITIES": "compute,utility,graphics,display",
+    "QT_X11_NO_MITSHM": "1"
+  },
+  "mounts": [
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,readonly",
+    "source=/tmp/limap-devcontainer-${localEnv:USER}.xauth,target=/tmp/limap-devcontainer.xauth,type=bind,readonly",
+    "source=limap-devcontainer-ccache,target=/home/vscode/.cache/ccache,type=volume"
+  ],
+  "hostRequirements": {
+    "gpu": true,
+    "memory": "16gb",
+    "storage": "30gb"
+  },
+  "initializeCommand": "bash .devcontainer/check-host.sh",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/opt/venv/bin/python",
+        "cmake.buildDirectory": "${workspaceFolder}/build/devcontainer"
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  }
+}
